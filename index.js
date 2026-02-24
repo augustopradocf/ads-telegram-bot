@@ -12,7 +12,12 @@ console.log("🔥 DJ ADS Bot iniciado...");
 // 🚀 COMANDO /START
 // =========================
 bot.onText(/\/start/, (msg) => {
-  bot.sendMessage(msg.chat.id, "🔥 DJ ADS 2026.1 ativo!\n\n🎵 Use /play nome da música\n🚫 Use /ban respondendo alguém\n😈 Cuidado com as zoeiras...");
+  bot.sendMessage(msg.chat.id, 
+    "🔥 DJ ADS 2026.1 ativo!\n\n" +
+    "🎵 /play nome da música\n" +
+    "🚫 /ban (respondendo alguém)\n" +
+    "😈 Cuidado com a guerra das linguagens..."
+  );
 });
 
 // =========================
@@ -57,40 +62,31 @@ bot.onText(/\/play (.+)/, async (msg, match) => {
 });
 
 // =========================
-// 🚫 COMANDO /BAN (SÓ ADMIN)
+// 🚫 COMANDO /BAN
 // =========================
 bot.onText(/\/ban/, async (msg) => {
   const chatId = msg.chat.id;
-
-  if (msg.chat.type === "private") {
-    return bot.sendMessage(chatId, "❌ Esse comando só funciona em grupo.");
-  }
 
   if (!msg.reply_to_message) {
     return bot.sendMessage(chatId, "❌ Responda a mensagem da pessoa que deseja banir.");
   }
 
   try {
-    const admins = await bot.getChatAdministrators(chatId);
-    const isAdmin = admins.some(admin => admin.user.id === msg.from.id);
-
-    if (!isAdmin) {
-      return bot.sendMessage(chatId, "🚫 Apenas administradores podem usar /ban.");
-    }
-
     const userId = msg.reply_to_message.from.id;
 
-    await bot.banChatMember(chatId, userId);
+    await bot.banChatMember(chatId, userId, {
+      revoke_messages: true
+    });
 
-    bot.sendMessage(chatId, "🚫 Usuário banido com sucesso.");
+    bot.sendMessage(chatId, "🚫 Usuário removido com sucesso.");
   } catch (error) {
     console.log(error);
-    bot.sendMessage(chatId, "❌ Não consegui banir. Verifique permissões.");
+    bot.sendMessage(chatId, "❌ Não consegui banir.");
   }
 });
 
 // =========================
-// 😂 ZOEIRAS + MODO INTELIGENTE
+// 😂 ZOEIRAS + GUERRA DAS LINGUAGENS
 // =========================
 bot.on('message', async (msg) => {
   const chatId = msg.chat.id;
@@ -98,12 +94,9 @@ bot.on('message', async (msg) => {
 
   if (!text) return;
 
-  // Evita conflito com comandos
-  if (text.startsWith("/play")) return;
-  if (text.startsWith("/start")) return;
-  if (text.startsWith("/ban")) return;
+  if (text.startsWith("/")) return;
 
-  // 🔥 Zoeiras automáticas
+  // ADS zoeiras
   if (text.includes("calouro")) {
     return bot.sendMessage(chatId, "👶 Calouro detectado. Favor entregar a carteirinha.");
   }
@@ -124,7 +117,27 @@ bot.on('message', async (msg) => {
     return bot.sendMessage(chatId, "📝 Prova surpresa detectada. Preparem o psicológico.");
   }
 
-  // 🧠 Resposta inteligente simples
+  // ☕ Java
+  if (text.includes("java")) {
+    return bot.sendMessage(chatId, "☕ Java detectado. Runtime: 3 horas. Erro: faltou ponto e vírgula.");
+  }
+
+  // 🐍 Python
+  if (text.includes("python")) {
+    return bot.sendMessage(chatId, "🐍 Python detectado. Indentação errada e o caos começa.");
+  }
+
+  // 💻 C++
+  if (text.includes("c++")) {
+    return bot.sendMessage(chatId, "💻 C++ detectado. Segmentation fault incoming...");
+  }
+
+  // 🌐 JavaScript
+  if (text.includes("javascript") || text.includes("js")) {
+    return bot.sendMessage(chatId, "🌐 JavaScript detectado. Funciona... até parar de funcionar.");
+  }
+
+  // 🧠 Resposta inteligente básica
   if (text.endsWith("?")) {
     return bot.sendMessage(chatId, "🧠 Boa pergunta... estou analisando isso com meu cérebro de silício.");
   }
