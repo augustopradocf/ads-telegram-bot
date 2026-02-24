@@ -1,7 +1,6 @@
 const TelegramBot = require('node-telegram-bot-api');
 const yts = require('yt-search');
 const ytdl = require('ytdl-core');
-const fs = require('fs');
 
 const token = "8612845950:AAGb8-sgRn0nd5gXLxlGreVxTU7P5Kk6bu8";
 
@@ -21,7 +20,19 @@ bot.onText(/\/play (.+)/, async (msg, match) => {
       return bot.sendMessage(chatId, "❌ Música não encontrada.");
     }
 
-    const stream = ytdl(video.url, { filter: 'audioonly' });
+    const info = `🎵 ${video.title}
+⏱ ${video.timestamp}
+📺 ${video.url}
+
+🎧 Preview abaixo 👇`;
+
+    await bot.sendMessage(chatId, info);
+
+    const stream = ytdl(video.url, {
+      filter: 'audioonly',
+      quality: 'lowestaudio',
+      highWaterMark: 1 << 25
+    });
 
     bot.sendAudio(chatId, stream, {
       title: video.title
@@ -29,10 +40,10 @@ bot.onText(/\/play (.+)/, async (msg, match) => {
 
   } catch (err) {
     console.log(err);
-    bot.sendMessage(chatId, "❌ Erro ao buscar música.");
+    bot.sendMessage(chatId, "❌ Erro ao gerar preview.");
   }
 });
 
 bot.onText(/\/start/, (msg) => {
-  bot.sendMessage(msg.chat.id, "🔥 Bot DJ ADS ativo!\nUse /play nome da música 🎵");
+  bot.sendMessage(msg.chat.id, "🔥 DJ ADS ativo!\nUse /play nome da música 🎵");
 });
