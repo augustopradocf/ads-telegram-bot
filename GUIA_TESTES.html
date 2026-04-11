@@ -1,0 +1,192 @@
+<!-- 
+  GUIA DE TESTE - X-MERCADO
+  
+  Use este arquivo como referência para testar todas as funcionalidades
+  ou copie os dados para o console para teste rápido.
+-->
+
+<!-- 
+  DADOS DE TESTE PARA CLIENTE
+  
+  Email: teste@cliente.com
+  Senha: 123456
+  Nome: João Silva
+  Telefone: (11) 9999-9999
+  Endereço: Rua Principal, 100
+  Bairro: Centro
+-->
+
+<!-- 
+  DADOS DE TESTE PARA PROPRIETÁRIO
+  
+  Email: proprietario@loja.com
+  Senha: senha123
+  
+  Nome Loja: Mercado Exemplo
+  CNPJ: 12.345.678/0001-99
+  Endereço: Avenida da Loja, 500
+  Telefone: (11) 3333-3333
+  Horário: 07:00 - 22:00
+  
+  Proprietário:
+  Nome: João José Silva
+  Email: proprietario@loja.com
+  Telefone: (11) 9999-8888
+-->
+
+<!-- 
+  DADOS DE TESTE PARA FUNCIONÁRIO (opcional)
+  
+  Nome: Maria Santos
+  Email: funcionario@loja.com
+  Senha: func123
+  Telefone: (11) 9999-7777
+-->
+
+<!-- 
+  TESTE RÁPIDO VIA CONSOLE
+  
+  Copie e cole no console do navegador (F12 > Console):
+  
+  1. Para criar cliente de teste automaticamente:
+  
+  const clienteTeste = {
+    id: Date.now(),
+    nome: 'Cliente Teste',
+    email: 'teste@cliente.com',
+    senha: '123456',
+    telefone: '(11) 9999-9999',
+    endereco: 'Rua Principal, 100',
+    bairro: 'Centro',
+    pontos: 0,
+    desconto: 0,
+    pedidos: []
+  };
+  estadoApp.clientes.push(clienteTeste);
+  localStorage.setItem('clientes', JSON.stringify(estadoApp.clientes));
+  alert('Cliente de teste criado!');
+  
+  
+  2. Para adicionar produtos de teste rápido:
+  
+  const produtoTeste = {
+    id: Date.now(),
+    nome: 'Produto Teste',
+    preco: 10.00,
+    categoria: 'Teste',
+    estoque: 100,
+    lojaId: null
+  };
+  estadoApp.produtos.push(produtoTeste);
+  localStorage.setItem('produtos', JSON.stringify(estadoApp.produtos));
+  console.log('Produto adicionado!');
+  
+  
+  3. Para visualizar todos os dados salvos:
+  
+  console.log('Clientes:', estadoApp.clientes);
+  console.log('Lojas:', estadoApp.lojas);
+  console.log('Produtos:', estadoApp.produtos);
+  console.log('Pedidos:', estadoApp.pedidos);
+  
+  
+  4. Para limpar todos os dados:
+  
+  localStorage.clear();
+  location.reload();
+-->
+
+<!-- 
+  FLUXO DE TESTE RECOMENDADO
+  
+  1. TESTE CLIENTE:
+     - Ir para "Cliente"
+     - Clicar em "Cadastro"
+     - Preencher formulário
+     - Fazer login
+     - Adicionar produtos ao carrinho
+     - Finalizar compra
+     - Visualizar pedido e pontos
+  
+  2. TESTE PROPRIETÁRIO:
+     - Ir para "Gerenciamento"
+     - Clicar em "Cadastro da Loja"
+     - Preencher dados da loja e proprietário
+     - Fazer login
+     - Adicionar alguns produtos
+     - Ver pedidos criados pelos clientes
+     - Atualizar status do pedido
+  
+  3. TESTE SISTEMA DE PONTOS:
+     - Criar cliente e fazer compra
+     - Verificar pontos acumulados
+     - Clicar em "Resgate"
+     - Usar pontos na próxima compra
+  
+  4. TESTE RASTREAMENTO:
+     - Fazer pedido como cliente
+     - Como proprietário, atualizar status
+     - Como cliente, ver status atualizado
+-->
+
+<!-- 
+  CHECKLIST DE FUNCIONALIDADES
+  
+  [ ] Cadastro de cliente com validação
+  [ ] Login de cliente
+  [ ] Visualizar catálogo de produtos
+  [ ] Filtrar produtos por nome
+  [ ] Adicionar produtos ao carrinho
+  [ ] Atualizar quantidade no carrinho
+  [ ] Remover produtos do carrinho
+  [ ] Cálculo correto de subtotal
+  [ ] Cálculo correto de taxa de entrega
+  [ ] Checkout com endereço
+  [ ] Seleção de forma de pagamento
+  [ ] Uso de pontos como desconto
+  [ ] Geração de pedido
+  [ ] Acúmulo de pontos (1 ponto por R$ 1,00)
+  [ ] Visualizar pedidos realizados
+  [ ] Ver status do pedido com timeline
+  
+  [ ] Cadastro de loja com proprietário
+  [ ] Login do proprietário
+  [ ] Adicionar produtos como proprietário
+  [ ] Editar preço e estoque
+  [ ] Remover produtos
+  [ ] Visualizar todos os pedidos
+  [ ] Atualizar status do pedido
+  [ ] Ver histórico de status
+  [ ] Visualizar lista de clientes
+  [ ] Logout de cliente
+  [ ] Logout de proprietário
+  [ ] Dados persistem após recarregar página
+-->
+
+<!-- 
+  COMPORTAMENTO ESPERADO
+  
+  1. Primeira vez que abre o site:
+     - 10 produtos padrão aparecem
+     - Nenhum cliente ou loja cadastrados
+  
+  2. Após criar cliente:
+     - Cliente aparece na lista
+     - Login funciona com email/senha
+     - Sessão é mantida ao recarregar
+  
+  3. Ao fazer pedido:
+     - Pedido aparece em "Meus Pedidos"
+     - Status inicial é "Pendente"
+     - Pontos são acumulados
+  
+  4. Ao atualizar status (proprietário):
+     - Status muda imediatamente
+     - Timeline mostra novo status
+     - Cliente vê atualização
+  
+  5. Ao usar pontos:
+     - Pontos são deduzidos
+     - Desconto é aplicado
+     - Desconto aparece no total
+-->

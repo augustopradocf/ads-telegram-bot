@@ -1,0 +1,10 @@
+{
+  "name": "X-Mercado",
+  "short_name": "X-Mercado",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#eef4ff",
+  "theme_color": "#2f6dff",
+  "description": "Plataforma de supermercado com clientes, produtos, compras, pagamentos, entrega e gestão interna.",
+  "icons": []
+}

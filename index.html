@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X-Mercado - Seu Mercado de Bairro Online</title>
+  <meta name="description" content="X-Mercado: Compre produtos online, acompanhe entregas e acumule pontos de vantagem.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- NAVEGAÇÃO PRINCIPAL -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-brand">
+          <a href="#home" class="site-logo" onclick="goToSection('home'); return false;">
+            <span class="logo-icon">🛒</span>
+            <span class="logo-copy">
+              <span class="logo-name">X-Mercado</span>
+              <span class="logo-tagline">Seu mercado de bairro online</span>
+            </span>
+          </a>
+        </div>
+        <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div class="navbar-menu" id="navbarMenu">
+          <button class="nav-btn" data-section="home" onclick="goToSection('home')">Home</button>
+          <button class="nav-btn" data-section="cliente" onclick="goToSection('cliente')">Cliente</button>
+          <button class="nav-btn" data-section="admin" onclick="goToSection('admin')">Gerenciamento</button>
+          <button class="nav-btn logout-btn" onclick="logout()" style="display:none" id="logoutBtn">Sair</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- SEÇÃO HOME -->
+    <section id="home" class="section active">
+      <div class="container">
+        <div class="hero">
+          <h2>Bem-vindo ao X-Mercado!</h2>
+          <p>Compre do seu mercado de bairro com comodidade, acompanhe as entregas e acumule pontos!</p>
+          <div class="hero-buttons">
+            <button class="btn btn-primary" onclick="goToSection('cliente')">Entrar como Cliente</button>
+            <button class="btn btn-secondary" onclick="goToSection('admin')">Área Proprietário</button>
+          </div>
+        </div>
+
+          <div class="promo-section">
+            <h3>Promoções da Semana</h3>
+            <div id="promoGrid" class="promo-grid"></div>
+          </div>
+
+        <div class="features">
+          <div class="feature-card">
+            <h3>🛍️ Compras Fácil</h3>
+            <p>Navegue pelo catálogo e monte suas listas de compras</p>
+          </div>
+          <div class="feature-card">
+            <h3>🚚 Delivery Rápido</h3>
+            <p>Acompanhe seus pedidos em tempo real</p>
+          </div>
+          <div class="feature-card">
+            <h3>⭐ Pontos Vantagem</h3>
+            <p>Acumule e resgate pontos em suas compras</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO CLIENTE -->
+    <section id="cliente" class="section">
+      <div class="container">
+        <div id="clienteLogin" class="auth-container">
+          <h2>Área do Cliente</h2>
+          
+          <div class="auth-tabs">
+            <button class="auth-tab active" onclick="switchAuthTab('login')">Fazer Login</button>
+            <button class="auth-tab" onclick="switchAuthTab('register')">Cadastro</button>
+          </div>
+
+          <!-- LOGIN -->
+          <form id="loginForm" class="auth-form active" onsubmit="clienteLogin(event)">
+            <h3>Login</h3>
+            <input type="email" id="loginEmail" placeholder="Email" required>
+            <input type="password" id="loginSenha" placeholder="Senha" required>
+            <a href="#" onclick="forgotPassword('cliente')" class="forgot-link">Esqueci minha senha</a>
+            <button type="submit" class="btn btn-primary">Entrar</button>
+          </form>
+
+          <!-- CADASTRO -->
+          <form id="registerForm" class="auth-form" onsubmit="clienteRegister(event)">
+            <h3>Novo Cadastro</h3>
+            <input type="text" id="regNome" placeholder="Nome completo" required>
+            <input type="email" id="regEmail" placeholder="Email" required>
+            <input type="password" id="regSenha" placeholder="Senha" required>
+            <input type="tel" id="regTelefone" placeholder="Telefone" required>
+            <input type="text" id="regEndereco" placeholder="Endereço" required>
+            <input type="text" id="regBairro" placeholder="Bairro" required>
+            <button type="submit" class="btn btn-primary">Criar Conta</button>
+          </form>
+        </div>
+
+        <div id="clienteDashboard" class="dashboard" style="display:none;">
+          <div class="dashboard-header">
+            <h2>Olá, <span id="nomeCliente"></span>!</h2>
+            <div class="client-info">
+              <p>📧 <span id="emailCliente"></span></p>
+              <p>⭐ Pontos: <strong id="pontosCliente">0</strong></p>
+            </div>
+          </div>
+
+          <!-- ABAS DO CLIENTE -->
+          <div class="dashboard-tabs">
+            <button class="dash-tab active" onclick="switchClientTab('produtos')">Produtos</button>
+            <button class="dash-tab" onclick="switchClientTab('carrinho')">Carrinho</button>
+            <button class="dash-tab" onclick="switchClientTab('pedidos')">Meus Pedidos</button>
+            <button class="dash-tab" onclick="switchClientTab('pontos')">Pontos</button>
+          </div>
+
+          <!-- PRODUTOS -->
+          <div id="produtosTab" class="dashboard-content active">
+            <h3>Catálogo de Produtos</h3>
+            <div class="search-bar">
+              <input type="text" id="searchProduto" placeholder="Buscar produto..." onkeyup="filtrarProdutos()">
+            </div>
+            <div id="produtosList" class="produtos-grid">
+              <!-- Produtos serão inseridos aqui -->
+            </div>
+          </div>
+
+          <!-- CARRINHO -->
+          <div id="carrinhoTab" class="dashboard-content">
+            <h3>Seu Carrinho</h3>
+            <div id="carrinhoItems">
+              <!-- Itens do carrinho serão inseridos aqui -->
+            </div>
+            <div class="carrinho-resumo">
+              <p>Subtotal: <strong id="subtotal">R$ 0,00</strong></p>
+              <p>Entrega: <strong id="taxaEntrega">R$ 5,00</strong></p>
+              <p class="total">Total: <strong id="totalCarrinho">R$ 0,00</strong></p>
+              <button class="btn btn-primary" onclick="proceedToCheckout()">Finalizar Compra</button>
+            </div>
+          </div>
+
+          <!-- PEDIDOS -->
+          <div id="pedidosTab" class="dashboard-content">
+            <h3>Acompanhamento de Pedidos</h3>
+            <div id="pedidosList">
+              <!-- Pedidos serão inseridos aqui -->
+            </div>
+          </div>
+
+          <!-- PONTOS -->
+          <div id="pontosTab" class="dashboard-content">
+            <h3>Sistema de Pontos</h3>
+            <div class="pontos-info">
+              <h4>Saldo de Pontos: <span id="saldoPontos">0</span></h4>
+              <p>1 ponto = R$ 0,10 em desconto</p>
+            </div>
+            <div id="pontosResgate">
+              <h4>Descontos Disponíveis:</h4>
+              <div class="resgate-options">
+                <button class="resgate-btn" onclick="resgatar(10)" data-pontos="10">10 Pontos = R$ 1,00</button>
+                <button class="resgate-btn" onclick="resgatar(50)" data-pontos="50">50 Pontos = R$ 5,00</button>
+                <button class="resgate-btn" onclick="resgatar(100)" data-pontos="100">100 Pontos = R$ 10,00</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO ADMIN (PROPRIETÁRIO/FUNCIONÁRIO) -->
+    <section id="admin" class="section">
+      <div class="container">
+        <div id="adminLogin" class="auth-container">
+          <h2>Área Proprietário/Funcionário</h2>
+          
+          <div class="auth-tabs">
+            <button class="auth-tab active" onclick="switchAdminTab('login')">Fazer Login</button>
+            <button class="auth-tab" onclick="switchAdminTab('register')">Cadastro da Loja</button>
+          </div>
+
+          <!-- LOGIN ADMIN -->
+          <form id="adminLoginForm" class="auth-form active" onsubmit="adminLogin(event)">
+            <h3>Login</h3>
+            <input type="email" id="adminEmail" placeholder="Email" required>
+            <input type="password" id="adminSenha" placeholder="Senha" required>
+            <a href="#" onclick="forgotPassword('empresa')" class="forgot-link">Esqueci minha senha</a>
+            <button type="submit" class="btn btn-primary">Entrar</button>
+          </form>
+
+          <!-- CADASTRO LOJA -->
+          <form id="registerLojaForm" class="auth-form" onsubmit="cadastroLoja(event)">
+            <h3>Cadastro da Loja</h3>
+            
+            <h4>Informações do Mercado</h4>
+            <input type="text" id="nomeMercado" placeholder="Nome do Mercado" required>
+            <input type="text" id="cnpj" placeholder="CNPJ" required>
+            <input type="tel" id="telefoneMercado" placeholder="Telefone" required>
+            <input type="text" id="enderecMercado" placeholder="Endereço" required>
+            <input type="text" id="horarioFunc" placeholder="Horário de Funcionamento" required>
+
+            <h4>Dados do Proprietário</h4>
+            <input type="text" id="nomeProp" placeholder="Nome do Proprietário" required>
+            <input type="email" id="emailProp" placeholder="Email do Proprietário" required>
+            <input type="password" id="senhaProp" placeholder="Senha (Proprietário)" required>
+            <input type="tel" id="telefoneProp" placeholder="Telefone do Proprietário" required>
+
+            <h4>Funcionário (Opcional)</h4>
+            <input type="text" id="nomeFunc" placeholder="Nome do Funcionário">
+            <input type="email" id="emailFunc" placeholder="Email do Funcionário">
+            <input type="password" id="senhaFunc" placeholder="Senha (Funcionário)">
+            <input type="tel" id="telefoneFunc" placeholder="Telefone do Funcionário">
+
+            <button type="submit" class="btn btn-primary">Cadastrar Loja</button>
+          </form>
+        </div>
+
+        <div id="adminDashboard" class="admin-dashboard" style="display:none;">
+          <div class="admin-header">
+            <h2>Painel Administrativo</h2>
+            <p>Loja: <strong id="nomeLojaAdmin"></strong></p>
+          </div>
+
+          <div class="admin-tabs">
+            <button class="admin-tab active" onclick="switchAdminPanel('produtos')">Gerenciar Produtos</button>
+            <button class="admin-tab" onclick="switchAdminPanel('pedidos')">Pedidos</button>
+            <button class="admin-tab" onclick="switchAdminPanel('clientes')">Clientes</button>
+            <button class="admin-tab" onclick="switchAdminPanel('funcionarios')">Funcionários</button>
+          </div>
+
+          <!-- GERENCIAR PRODUTOS -->
+          <div id="adminProdutos" class="admin-content active">
+            <h3>Gerenciar Produtos</h3>
+            <form onsubmit="adicionarProduto(event)" class="add-produto-form">
+              <input type="text" id="nomeProd" placeholder="Nome do Produto" required>
+              <input type="number" id="precoProd" placeholder="Preço" step="0.01" required>
+              <input type="text" id="categoriaProd" placeholder="Categoria" required>
+              <input type="number" id="estoqueProd" placeholder="Estoque" required>
+              <button type="submit" class="btn btn-primary">Adicionar Produto</button>
+            </form>
+            <div id="produtosAdminList" class="admin-list">
+              <!-- Produtos serão listados aqui -->
+            </div>
+          </div>
+
+          <!-- PEDIDOS ADMIN -->
+          <div id="adminPedidos" class="admin-content">
+            <h3>Acompanhamento de Pedidos</h3>
+            <div id="pedidosAdminList" class="admin-list">
+              <!-- Pedidos serão listados aqui -->
+            </div>
+          </div>
+
+          <!-- CLIENTES ADMIN -->
+          <div id="adminClientes" class="admin-content">
+            <h3>Lista de Clientes</h3>
+            <div id="clientesAdminList" class="admin-list">
+              <!-- Clientes serão listados aqui -->
+            </div>
+          </div>
+
+          <!-- FUNCIONÁRIOS ADMIN -->
+          <div id="adminFuncionarios" class="admin-content">
+            <h3>Gerenciar Funcionários</h3>
+            <div id="funcionariosAdminList" class="admin-list">
+              <!-- Funcionários serão listados aqui -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODAL DE CHECKOUT -->
+    <div id="checkoutModal" class="modal" style="display:none;">
+      <div class="modal-content">
+        <button class="close-modal" onclick="fecharCheckout()">&times;</button>
+        <h2>Finalizar Compra</h2>
+        
+        <div class="checkout-form">
+          <h3>Endereço de Entrega</h3>
+          <input type="text" id="endereco" placeholder="Endereço" value="" required>
+          <input type="text" id="numero" placeholder="Número" required>
+          <input type="text" id="complemento" placeholder="Complemento (Apto, Sala, etc)">
+          
+          <h3>Forma de Pagamento</h3>
+          <select id="metodoPagamento" required>
+            <option value="">Selecione o método</option>
+            <option value="dinheiro">Dinheiro na Entrega</option>
+            <option value="pix">PIX</option>
+            <option value="debito">Débito</option>
+            <option value="credito">Crédito</option>
+          </select>
+
+          <h3>Usar Pontos como Desconto?</h3>
+          <input type="number" id="pontosDesconto" placeholder="Quantos pontos usar?" min="0" value="0">
+          
+          <button class="btn btn-primary" onclick="confirmarPedido()">Confirmar Pedido</button>
+          <button class="btn btn-secondary" onclick="fecharCheckout()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
